@@ -1,7 +1,6 @@
 defmodule TweetHarvesterRegistry do
   use GenServer
 
-
   # -- Client
 
   def start_link(opts \\ []) do

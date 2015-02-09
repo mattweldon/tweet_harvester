@@ -1,7 +1,6 @@
 defmodule TweetHarvesterConfig do
   use GenServer
 
-
   # -- Client
 
   def start_link do 
@@ -25,7 +24,6 @@ defmodule TweetHarvesterConfig do
         :error
     end
   end
-
 
   # -- Server
 
