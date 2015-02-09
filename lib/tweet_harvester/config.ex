@@ -9,13 +9,21 @@ defmodule TweetHarvesterConfig do
   end
 
   def save(username, config) do
-    {:ok, server} = TweetHarvesterRegistry.lookup(TweetHarvesterRegistry, username)
-    GenServer.cast(server, {:save, config})
+    case TweetHarvesterRegistry.lookup(TweetHarvesterRegistry, username) do
+      {:ok, server} -> 
+        GenServer.cast(server, {:save, config})
+      :error ->
+        :error
+    end
   end
 
   def find(username) do
-    {:ok, server} = TweetHarvesterRegistry.lookup(TweetHarvesterRegistry, username)
-    GenServer.call(server, :find)
+    case TweetHarvesterRegistry.lookup(TweetHarvesterRegistry, username) do
+      {:ok, server} ->
+        GenServer.call(server, :find)
+      :error ->
+        :error
+    end
   end
 
 
