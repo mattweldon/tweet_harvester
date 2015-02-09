@@ -21,7 +21,7 @@ defmodule TweetHarvesterConfig do
 
   # -- Server
 
-  def handle_cast({:save, new_config}, current_config) do
+  def handle_cast({:save, new_config}, _current_config) do
     {:noreply, new_config}
   end
 
