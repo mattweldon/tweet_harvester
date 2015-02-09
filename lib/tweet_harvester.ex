@@ -11,7 +11,6 @@ defmodule TweetHarvester do
     children = [
       worker(TweetHarvesterRegistry, [[name: @registry_name]])
     ]
-    IO.inspect children
     supervise(children, strategy: :one_for_one)
   end
 end
