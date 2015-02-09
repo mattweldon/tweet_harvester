@@ -1,16 +1,11 @@
-defmodule TweetHarvester.Config do
+defmodule TweetHarvesterConfig do
   use GenServer
+
 
   # -- Client
 
-  def start_link(username, api_key, api_secret) do 
-    server = [
-      username: username, 
-      api_key: api_key, 
-      api_secret: api_secret,
-      polling_ms: 5000
-    ]
-    GenServer.start_link(__MODULE__, server)
+  def start_link do 
+    GenServer.start_link(__MODULE__, [])
   end
 
   def save(server, config) do
@@ -24,7 +19,7 @@ defmodule TweetHarvester.Config do
 
   # -- Server
 
-  def handle_cast({:save, new_config}, _current_config) do
+  def handle_cast({:save, new_config}, current_config) do
     {:noreply, new_config}
   end
 
