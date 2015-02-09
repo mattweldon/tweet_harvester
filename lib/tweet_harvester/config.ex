@@ -8,11 +8,13 @@ defmodule TweetHarvesterConfig do
     GenServer.start_link(__MODULE__, [])
   end
 
-  def save(server, config) do
+  def save(username, config) do
+    {:ok, server} = TweetHarvesterRegistry.lookup(TweetHarvesterRegistry, username)
     GenServer.cast(server, {:save, config})
   end
 
-  def find(server) do
+  def find(username) do
+    {:ok, server} = TweetHarvesterRegistry.lookup(TweetHarvesterRegistry, username)
     GenServer.call(server, :find)
   end
 
