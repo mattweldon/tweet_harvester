@@ -1,6 +1,19 @@
 defmodule TweetHarvesterConfigTest do
   use ExUnit.Case
 
+  test "set_api_credentials adds credentials for the keyname given" do
+    TweetHarvester.start_link
+    TweetHarvesterRegistry.create(TweetHarvesterRegistry, "mattweldon")
+
+    TweetHarvesterConfig.set_api_credentials("mattweldon", "key", "secret")
+
+    updated_config = TweetHarvesterConfig.find("mattweldon")
+
+    assert updated_config[:username] == "mattweldon"
+    assert updated_config[:api_key] == "key"
+    assert updated_config[:api_secret] == "secret"
+  end
+
   test "saving config returns :ok" do
     TweetHarvester.start_link
     TweetHarvesterRegistry.create(TweetHarvesterRegistry, "mattweldon")
