@@ -8,8 +8,8 @@ defmodule TweetHarvesterConfig do
   end
 
   def set_api_credentials(username, api_key, api_secret) do
-    credentials = [ username: username, api_key: api_key, api_secret: api_secret ]
-    
+    credentials = [ username: username, api_key: api_key, api_secret: api_secret, polling_ms: 10000 ]
+
     case TweetHarvesterRegistry.lookup(TweetHarvesterRegistry, username) do
       {:ok, server} -> 
         GenServer.cast(server, {:set_api_credentials, credentials})
