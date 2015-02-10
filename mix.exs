@@ -25,6 +25,9 @@ defmodule TweetHarvester.Mixfile do
   #
   # Type `mix help deps` for more examples and options
   defp deps do
-    []
+    [
+      {:oauth, github: "tim/erlang-oauth"},
+      {:extwitter, "~> 0.2"}
+    ]
   end
 end
