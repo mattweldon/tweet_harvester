@@ -5,13 +5,15 @@ defmodule TweetHarvesterConfigTest do
     TweetHarvester.start_link
     TweetHarvesterRegistry.create(TweetHarvesterRegistry, "mattweldon")
 
-    TweetHarvesterConfig.set_api_credentials("mattweldon", "key", "secret")
+    TweetHarvesterConfig.set_api_credentials("mattweldon", "consumer", "consumer secret", "access", "access secret")
 
     updated_config = TweetHarvesterConfig.find("mattweldon")
 
     assert updated_config[:username] == "mattweldon"
-    assert updated_config[:api_key] == "key"
-    assert updated_config[:api_secret] == "secret"
+    assert updated_config[:consumer_key] == "consumer"
+    assert updated_config[:consumer_secret] == "consumer secret"
+    assert updated_config[:access_token] == "access"
+    assert updated_config[:access_secret] == "access secret"
   end
 
   test "saving config returns :ok" do
