@@ -12,7 +12,7 @@ defmodule TweetHarvester.Mixfile do
   #
   # Type `mix help compile.app` for more information
   def application do
-    [applications: [:logger]]
+    [applications: [:logger, :dotenv]]
   end
 
   # Dependencies can be Hex packages:
@@ -27,7 +27,8 @@ defmodule TweetHarvester.Mixfile do
   defp deps do
     [
       {:oauth, github: "tim/erlang-oauth"},
-      {:extwitter, "~> 0.2"}
+      {:extwitter, "~> 0.2"},
+      {:dotenv, "~> 0.0.4"}
     ]
   end
 end

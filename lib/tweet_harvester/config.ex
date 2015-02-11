@@ -18,7 +18,7 @@ defmodule TweetHarvesterConfig do
     ]
 
     case TweetHarvesterRegistry.lookup(TweetHarvesterRegistry, username) do
-      {:ok, server} -> 
+      {:ok, {server, _worker}} -> 
         GenServer.cast(server, {:set_api_credentials, credentials})
       :error ->
         :error
@@ -27,7 +27,7 @@ defmodule TweetHarvesterConfig do
 
   def save(username, config) do
     case TweetHarvesterRegistry.lookup(TweetHarvesterRegistry, username) do
-      {:ok, server} -> 
+      {:ok, {server, _worker}} -> 
         GenServer.cast(server, {:save, config})
       :error ->
         :error
@@ -36,7 +36,7 @@ defmodule TweetHarvesterConfig do
 
   def find(username) do
     case TweetHarvesterRegistry.lookup(TweetHarvesterRegistry, username) do
-      {:ok, server} ->
+      {:ok, {server, _worker}} ->
         GenServer.call(server, :find)
       :error ->
         :error

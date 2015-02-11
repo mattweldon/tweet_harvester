@@ -38,7 +38,9 @@ defmodule TweetHarvesterRegistry do
       {:noreply, names}
     else
       {:ok, config} = TweetHarvesterConfig.start_link()
-      {:noreply, HashDict.put(names, name, config)}
+      {:ok, worker} = TweetHarvesterWorker.start_link()
+
+      {:noreply, HashDict.put(names, name, {config, worker})}
     end
   end
 
