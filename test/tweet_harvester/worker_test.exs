@@ -5,7 +5,7 @@ defmodule TweetHarvesterWorkerTest do
 
     TweetHarvester.start_link
     TweetHarvesterRegistry.create(TweetHarvesterRegistry, "mattweldon")
-    TweetHarvesterConfig.set_api_credentials(
+    TweetHarvesterConfig.add_account_for_harvest(
       "mattweldon", 
       System.get_env("TWITTER_CONSUMER_KEY"), 
       System.get_env("TWITTER_CONSUMER_SECRET"), 

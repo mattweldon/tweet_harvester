@@ -1,11 +1,11 @@
 defmodule TweetHarvesterConfigTest do
   use ExUnit.Case
 
-  test "set_api_credentials adds credentials for the keyname given" do
+  test "add_account_for_harvest adds credentials for the keyname given" do
     TweetHarvester.start_link
     TweetHarvesterRegistry.create(TweetHarvesterRegistry, "mattweldon")
 
-    TweetHarvesterConfig.set_api_credentials("mattweldon", "consumer", "consumer secret", "access", "access secret")
+    TweetHarvesterConfig.add_account_for_harvest("mattweldon", "consumer", "consumer secret", "access", "access secret")
 
     updated_config = TweetHarvesterConfig.find("mattweldon")
 

@@ -7,7 +7,7 @@ defmodule TweetHarvesterConfig do
     GenServer.start_link(__MODULE__, [])
   end
 
-  def set_api_credentials(username, consumer_key, consumer_secret, access_token, access_secret) do
+  def add_account_for_harvest(username, consumer_key, consumer_secret, access_token, access_secret) do
     credentials = [ 
       username: username, 
       consumer_key: consumer_key, 
@@ -19,7 +19,7 @@ defmodule TweetHarvesterConfig do
 
     case TweetHarvesterRegistry.lookup(TweetHarvesterRegistry, username) do
       {:ok, {server, _worker}} -> 
-        GenServer.cast(server, {:set_api_credentials, credentials})
+        GenServer.cast(server, {:add_account_for_harvest, credentials})
       :error ->
         :error
     end
@@ -45,7 +45,7 @@ defmodule TweetHarvesterConfig do
 
   # -- Server
 
-  def handle_cast({:set_api_credentials, credentials}, current_config) do
+  def handle_cast({:add_account_for_harvest, credentials}, current_config) do
     {:noreply, current_config ++ credentials}
   end
 
