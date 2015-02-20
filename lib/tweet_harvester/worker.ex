@@ -17,7 +17,7 @@ defmodule TweetHarvesterWorker do
   # -- Server
 
   def handle_cast({:poll, config}, _state) do
-  IO.inspect "here"
+
     # Get tweets for the user
     ExTwitter.configure(:process, [
       consumer_key: config[:consumer_key],
@@ -25,8 +25,6 @@ defmodule TweetHarvesterWorker do
       access_token: config[:access_token],
       access_token_secret: config[:access_secret]
     ])
-
-    IO.inspect "here"
 
     ExTwitter.user_timeline([screen_name: config[:username], count: 20]) |>
      Enum.map(fn(tweet) -> tweet.text end) |>

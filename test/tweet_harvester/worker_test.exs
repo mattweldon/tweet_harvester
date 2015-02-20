@@ -16,12 +16,6 @@ defmodule TweetHarvesterWorkerTest do
     {:ok, {config, worker}} = TweetHarvesterRegistry.lookup(TweetHarvesterRegistry, "mattweldon")
 
     worker_config = TweetHarvesterConfig.find("mattweldon")
-
-    IO.inspect worker
-    # IO.inspect worker_config
-
-    # TweetHarvesterWorker.poll(worker, worker_config)
-
   end
 
 end
