@@ -13,8 +13,7 @@ defmodule TweetHarvesterConfig do
       consumer_key: consumer_key, 
       consumer_secret: consumer_secret, 
       access_token: access_token, 
-      access_secret: access_secret, 
-      polling_ms: 30000 
+      access_secret: access_secret
     ]
 
     case TweetHarvesterRegistry.lookup(TweetHarvesterRegistry, username) do

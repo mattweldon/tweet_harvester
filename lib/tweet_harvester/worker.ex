@@ -9,9 +9,6 @@ defmodule TweetHarvesterWorker do
 
   def poll(server, config) do
     spawn(GenServer.cast(server, {:poll, config}))
-
-    # :timer.sleep(config[:polling_ms])
-    # TweetHarvesterWorker.poll(server, config)
   end
 
   # -- Server
