@@ -7,7 +7,7 @@ defmodule TweetHarvesterConfigTest do
 
     TweetHarvesterConfig.add_account_for_harvest(config, "mattweldon", "consumer", "consumer secret", "access", "access secret")
 
-    updated_config = TweetHarvesterConfig.find(config, "mattweldon")
+    { :ok, updated_config } = TweetHarvesterConfig.find(config, "mattweldon")
 
     assert updated_config[:username] == "mattweldon"
     assert updated_config[:consumer_key] == "consumer"
@@ -27,29 +27,19 @@ defmodule TweetHarvesterConfigTest do
     { :ok, sup } = TweetHarvester.start_link
     { :ok, config } = TweetHarvester.start_config(sup)
 
-    # TweetHarvesterRegistry.create(TweetHarvesterRegistry, "mattweldon")
-    # TweetHarvesterRegistry.create(TweetHarvesterRegistry, "johndoe")
-
     TweetHarvesterConfig.save(config, "mattweldon", [test_key: "test value"])
     TweetHarvesterConfig.save(config, "johndoe", [test_key2: "test value2"])
 
-    config = TweetHarvesterConfig.find(config, "mattweldon")
+    { :ok, updated_config } = TweetHarvesterConfig.find(config, "mattweldon")
 
-    assert config == [test_key: "test value"]
-  end
-
-  test "saving config for an unknown keyname returns :error" do
-    TweetHarvester.start_link
-    TweetHarvesterRegistry.create(TweetHarvesterRegistry, "mattweldon")
-
-    assert :error = TweetHarvesterConfig.save("johndoe", [test_key2: "test value2"])
+    assert updated_config == [test_key: "test value"]
   end
 
   test "finding config for an unknown keyname returns :error" do
-    TweetHarvester.start_link
-    TweetHarvesterRegistry.create(TweetHarvesterRegistry, "mattweldon")
+    { :ok, sup } = TweetHarvester.start_link
+    { :ok, config } = TweetHarvester.start_config(sup)
 
-    assert :error = TweetHarvesterConfig.find("johndoe")
+    assert :error = TweetHarvesterConfig.find(config, "johndoe")
   end
 
 end

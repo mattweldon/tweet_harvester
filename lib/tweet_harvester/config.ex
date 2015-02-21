@@ -4,7 +4,7 @@ defmodule TweetHarvesterConfig do
   # -- Client
 
   def start_link(opts \\ []) do 
-    GenServer.start_link(__MODULE__, [])
+    GenServer.start_link(__MODULE__, :ok, opts)
   end
 
   def add_account_for_harvest(server, username, consumer_key, consumer_secret, access_token, access_secret) do
@@ -16,29 +16,33 @@ defmodule TweetHarvesterConfig do
       access_secret: access_secret
     ]
 
-    GenServer.cast(server, {:add_account_for_harvest, credentials})
+    GenServer.cast(server, {:add_account_for_harvest, {username, credentials}})
   end
 
   def save(server, username, config) do
-    GenServer.cast(server, {:save, config})
+    GenServer.cast(server, {:save, { username, config }})
   end
 
   def find(server, username) do
-    GenServer.call(server, :find)
+    GenServer.call(server, {:find, username})
   end
 
   # -- Server
 
-  def handle_cast({:add_account_for_harvest, credentials}, current_config) do
-    {:noreply, current_config ++ credentials}
+  def init(_) do
+    { :ok, HashDict.new }
   end
 
-  def handle_cast({:save, new_config}, _current_config) do
-    {:noreply, new_config}
+  def handle_cast({:add_account_for_harvest, { username, settings}}, current_config) do
+    {:noreply, HashDict.put(current_config, username, settings)}
   end
 
-  def handle_call(:find, _from, current_config) do
-    { :reply, current_config, current_config }
+  def handle_cast({:save, { username, settings }}, current_config) do
+    {:noreply, HashDict.put(current_config, username, settings)}
+  end
+
+  def handle_call({:find, name}, _from, names) do
+    {:reply, HashDict.fetch(names, name), names}
   end
 
 end
