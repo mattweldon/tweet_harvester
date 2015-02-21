@@ -5,7 +5,7 @@ defmodule TweetHarvester do
     Supervisor.start_link(__MODULE__, :ok)
   end
 
-  def start_config(sup) do
+  def start_account_list(sup) do
     Supervisor.start_child(sup, [])
   end
 
@@ -13,7 +13,7 @@ defmodule TweetHarvester do
 
   def init(:ok) do
     children = [
-      worker(TweetHarvesterConfig, []),
+      worker(TweetHarvester.AccountList, []),
     ]
     supervise(children, strategy: :simple_one_for_one)
   end

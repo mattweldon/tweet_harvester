@@ -1,4 +1,4 @@
-defmodule TweetHarvesterConfig do
+defmodule TweetHarvester.AccountList do
   use GenServer
 
   # -- Client

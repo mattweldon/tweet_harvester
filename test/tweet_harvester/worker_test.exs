@@ -3,9 +3,9 @@ defmodule TweetHarvesterWorkerTest do
 
   test "testing initial worker implementation" do
     { :ok, sup } = TweetHarvester.start_link
-    { :ok, config } = TweetHarvester.start_config(sup)
+    { :ok, config } = TweetHarvester.start_account_list(sup)
 
-    TweetHarvesterConfig.add_account_for_harvest(
+    TweetHarvester.AccountList.add_account_for_harvest(
       config,
       "mattweldon", 
       System.get_env("TWITTER_CONSUMER_KEY"), 
@@ -14,7 +14,7 @@ defmodule TweetHarvesterWorkerTest do
       System.get_env("TWITTER_ACCESS_SECRET")
     )
 
-    worker_config = TweetHarvesterConfig.find(config, "mattweldon")
+    worker_config = TweetHarvester.AccountList.find(config, "mattweldon")
   end
 
 end
