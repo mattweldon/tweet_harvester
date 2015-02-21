@@ -7,16 +7,8 @@ defmodule TweetHarvester.AccountList do
     GenServer.start_link(__MODULE__, :ok, opts)
   end
 
-  def add_account_for_harvest(server, username, consumer_key, consumer_secret, access_token, access_secret) do
-    credentials = [ 
-      username: username, 
-      consumer_key: consumer_key, 
-      consumer_secret: consumer_secret, 
-      access_token: access_token, 
-      access_secret: access_secret
-    ]
-
-    GenServer.cast(server, {:add_account_for_harvest, {username, credentials}})
+  def add_account(server, username, settings) do
+    GenServer.cast(server, {:add_account, {username, settings ++ [ username: username ]}})
   end
 
   def save(server, username, config) do
@@ -33,7 +25,7 @@ defmodule TweetHarvester.AccountList do
     { :ok, HashDict.new }
   end
 
-  def handle_cast({:add_account_for_harvest, { username, settings}}, current_config) do
+  def handle_cast({:add_account, { username, settings}}, current_config) do
     {:noreply, HashDict.put(current_config, username, settings)}
   end
 

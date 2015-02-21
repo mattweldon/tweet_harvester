@@ -5,7 +5,14 @@ defmodule TweetHarvester.AccountListTest do
     { :ok, sup } = TweetHarvester.start_link
     { :ok, config } = TweetHarvester.start_account_list(sup)
 
-    TweetHarvester.AccountList.add_account_for_harvest(config, "mattweldon", "consumer", "consumer secret", "access", "access secret")
+    settings = [
+      consumer_key: "consumer", 
+      consumer_secret: "consumer secret", 
+      access_token: "access",
+      access_secret: "access secret"
+    ]
+
+    TweetHarvester.AccountList.add_account(config, "mattweldon", settings)
 
     { :ok, updated_config } = TweetHarvester.AccountList.find(config, "mattweldon")
 

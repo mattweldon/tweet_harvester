@@ -5,13 +5,17 @@ defmodule TweetHarvesterWorkerTest do
     { :ok, sup } = TweetHarvester.start_link
     { :ok, config } = TweetHarvester.start_account_list(sup)
 
-    TweetHarvester.AccountList.add_account_for_harvest(
+    settings = [
+      consumer_key: System.get_env("TWITTER_CONSUMER_KEY"), 
+      consumer_secret: System.get_env("TWITTER_CONSUMER_SECRET"), 
+      access_token: System.get_env("TWITTER_ACCESS_TOKEN"),
+      access_secret: System.get_env("TWITTER_ACCESS_SECRET")
+    ]
+
+    TweetHarvester.AccountList.add_account(
       config,
-      "mattweldon", 
-      System.get_env("TWITTER_CONSUMER_KEY"), 
-      System.get_env("TWITTER_CONSUMER_SECRET"), 
-      System.get_env("TWITTER_ACCESS_TOKEN"),
-      System.get_env("TWITTER_ACCESS_SECRET")
+      "mattweldon",
+      settings
     )
 
     worker_config = TweetHarvester.AccountList.find(config, "mattweldon")
