@@ -2,10 +2,11 @@ defmodule TweetHarvesterWorkerTest do
   use ExUnit.Case
 
   test "testing initial worker implementation" do
+    { :ok, sup } = TweetHarvester.start_link
+    { :ok, config } = TweetHarvester.start_config(sup)
 
-    TweetHarvester.start_link
-    TweetHarvesterRegistry.create(TweetHarvesterRegistry, "mattweldon")
     TweetHarvesterConfig.add_account_for_harvest(
+      config,
       "mattweldon", 
       System.get_env("TWITTER_CONSUMER_KEY"), 
       System.get_env("TWITTER_CONSUMER_SECRET"), 
@@ -13,9 +14,7 @@ defmodule TweetHarvesterWorkerTest do
       System.get_env("TWITTER_ACCESS_SECRET")
     )
 
-    {:ok, {config, worker}} = TweetHarvesterRegistry.lookup(TweetHarvesterRegistry, "mattweldon")
-
-    worker_config = TweetHarvesterConfig.find("mattweldon")
+    worker_config = TweetHarvesterConfig.find(config, "mattweldon")
   end
 
 end
