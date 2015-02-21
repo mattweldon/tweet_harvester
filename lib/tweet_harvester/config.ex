@@ -3,11 +3,11 @@ defmodule TweetHarvesterConfig do
 
   # -- Client
 
-  def start_link do 
+  def start_link(opts \\ []) do 
     GenServer.start_link(__MODULE__, [])
   end
 
-  def add_account_for_harvest(username, consumer_key, consumer_secret, access_token, access_secret) do
+  def add_account_for_harvest(server, username, consumer_key, consumer_secret, access_token, access_secret) do
     credentials = [ 
       username: username, 
       consumer_key: consumer_key, 
@@ -16,30 +16,15 @@ defmodule TweetHarvesterConfig do
       access_secret: access_secret
     ]
 
-    case TweetHarvesterRegistry.lookup(TweetHarvesterRegistry, username) do
-      {:ok, {server, _worker}} -> 
-        GenServer.cast(server, {:add_account_for_harvest, credentials})
-      :error ->
-        :error
-    end
+    GenServer.cast(server, {:add_account_for_harvest, credentials})
   end
 
-  def save(username, config) do
-    case TweetHarvesterRegistry.lookup(TweetHarvesterRegistry, username) do
-      {:ok, {server, _worker}} -> 
-        GenServer.cast(server, {:save, config})
-      :error ->
-        :error
-    end
+  def save(server, username, config) do
+    GenServer.cast(server, {:save, config})
   end
 
-  def find(username) do
-    case TweetHarvesterRegistry.lookup(TweetHarvesterRegistry, username) do
-      {:ok, {server, _worker}} ->
-        GenServer.call(server, :find)
-      :error ->
-        :error
-    end
+  def find(server, username) do
+    GenServer.call(server, :find)
   end
 
   # -- Server

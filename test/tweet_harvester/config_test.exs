@@ -2,12 +2,12 @@ defmodule TweetHarvesterConfigTest do
   use ExUnit.Case
 
   test "add_account_for_harvest adds credentials for the keyname given" do
-    TweetHarvester.start_link
-    TweetHarvesterRegistry.create(TweetHarvesterRegistry, "mattweldon")
+    { :ok, sup } = TweetHarvester.start_link
+    { :ok, config } = TweetHarvester.start_config(sup)
 
-    TweetHarvesterConfig.add_account_for_harvest("mattweldon", "consumer", "consumer secret", "access", "access secret")
+    TweetHarvesterConfig.add_account_for_harvest(config, "mattweldon", "consumer", "consumer secret", "access", "access secret")
 
-    updated_config = TweetHarvesterConfig.find("mattweldon")
+    updated_config = TweetHarvesterConfig.find(config, "mattweldon")
 
     assert updated_config[:username] == "mattweldon"
     assert updated_config[:consumer_key] == "consumer"
@@ -17,21 +17,23 @@ defmodule TweetHarvesterConfigTest do
   end
 
   test "saving config returns :ok" do
-    TweetHarvester.start_link
-    TweetHarvesterRegistry.create(TweetHarvesterRegistry, "mattweldon")
+    { :ok, sup } = TweetHarvester.start_link
+    { :ok, config } = TweetHarvester.start_config(sup)
 
-    assert :ok = TweetHarvesterConfig.save("mattweldon", [test_key: "test value"])
+    assert :ok = TweetHarvesterConfig.save(config, "mattweldon", [test_key: "test value"])
   end
 
   test "config is saved to the named registry entry" do
-    TweetHarvester.start_link
-    TweetHarvesterRegistry.create(TweetHarvesterRegistry, "mattweldon")
-    TweetHarvesterRegistry.create(TweetHarvesterRegistry, "johndoe")
+    { :ok, sup } = TweetHarvester.start_link
+    { :ok, config } = TweetHarvester.start_config(sup)
 
-    TweetHarvesterConfig.save("mattweldon", [test_key: "test value"])
-    TweetHarvesterConfig.save("johndoe", [test_key2: "test value2"])
+    # TweetHarvesterRegistry.create(TweetHarvesterRegistry, "mattweldon")
+    # TweetHarvesterRegistry.create(TweetHarvesterRegistry, "johndoe")
 
-    config = TweetHarvesterConfig.find("mattweldon")
+    TweetHarvesterConfig.save(config, "mattweldon", [test_key: "test value"])
+    TweetHarvesterConfig.save(config, "johndoe", [test_key2: "test value2"])
+
+    config = TweetHarvesterConfig.find(config, "mattweldon")
 
     assert config == [test_key: "test value"]
   end

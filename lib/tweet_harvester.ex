@@ -5,12 +5,16 @@ defmodule TweetHarvester do
     Supervisor.start_link(__MODULE__, :ok)
   end
 
+  def start_config(sup) do
+    Supervisor.start_child(sup, [])
+  end
+
   @registry_name TweetHarvesterRegistry
 
   def init(:ok) do
     children = [
-      worker(TweetHarvesterRegistry, [[name: @registry_name]])
+      worker(TweetHarvesterConfig, []),
     ]
-    supervise(children, strategy: :one_for_one)
+    supervise(children, strategy: :simple_one_for_one)
   end
 end
