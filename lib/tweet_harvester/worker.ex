@@ -1,36 +1,32 @@
-defmodule TweetHarvesterWorker do
-  use GenServer
+defmodule TweetHarvester.Worker do
 
-  # -- Client
-
-  def start_link do
-    GenServer.start_link(__MODULE__, [])
+  def start(account_list) do
+    loop(account_list)
   end
 
-  def poll(server, config) do
-    spawn(GenServer.cast(server, {:poll, config}))
+  def loop(account_list) do
+
+
+    :timer.sleep(10000)
+    loop(account_list)
   end
 
-  # -- Server
+  def pick_account(account_list) do
 
-  def handle_cast({:poll, config}, _state) do
+  end
 
-    # Get tweets for the user
+  def get_tweets(account) do
     ExTwitter.configure(:process, [
-      consumer_key: config[:consumer_key],
-      consumer_secret: config[:consumer_secret],
-      access_token: config[:access_token],
-      access_token_secret: config[:access_secret]
+      consumer_key: account[:consumer_key],
+      consumer_secret: account[:consumer_secret],
+      access_token: account[:access_token],
+      access_token_secret: account[:access_secret]
     ])
 
-    ExTwitter.user_timeline([screen_name: config[:username], count: 20]) |>
+    ExTwitter.user_timeline([screen_name: account[:username], count: 20]) |>
      Enum.map(fn(tweet) -> tweet.text end) |>
      Enum.join("\n-----\n") |>
      IO.puts
-
-
-    # Add them to the tweet store
-
   end
 
 end
